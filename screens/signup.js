@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -67,87 +68,115 @@ const Signup = props => {
   };
 
   return (
-    <SafeAreaView style={container}>
-      <Text
-        style={{
-          fontWeight: 'bold',
-          fontSize: 32,
-          textAlign: 'center',
-          marginVertical: 32,
-          fontStyle: 'italic',
-          color: '#410DAA',
-        }}>
-        ParkIT
-      </Text>
-      <Text>{error}</Text>
-      <Text
-        style={{marginHorizontal: 16, marginBottom: 16, fontWeight: 'bold'}}>
-        Name
-      </Text>
-      {/* Input for name */}
-      <View style={borderContainer}>
-        <TextInput value={name} onChangeText={name => setName(name)} />
-      </View>
-      <Text
-        style={{marginHorizontal: 16, marginBottom: 16, fontWeight: 'bold'}}>
-        Email
-      </Text>
-      {/* Input for email */}
-      <View style={borderContainer}>
-        <TextInput value={email} onChangeText={email => setEmail(email)} />
-      </View>
-      <Text
-        style={{marginHorizontal: 16, marginBottom: 16, fontWeight: 'bold'}}>
-        Password
-      </Text>
-      {/* Input for password */}
-      <View style={borderContainer}>
-        <TextInput
-          value={password}
-          onChangeText={password => setPassword(password)}
-        />
-      </View>
-      <TouchableOpacity
-        onPress={onSIgninPressed}
-        style={{
-          padding: 16,
-          margin: 16,
-          backgroundColor: '#410DAA',
-          alignItems: 'center',
-          borderRadius: 8,
-          alignSelf: 'center',
-          paddingHorizontal: 32,
-        }}>
-        {isLoading ? (
-          <ActivityIndicator color={'#fff'} />
-        ) : (
-          <Text style={{color: '#fff'}}>Sign Up</Text>
-        )}
-      </TouchableOpacity>
-      {/* If the user has an acount navigate back to login */}
-      <TouchableOpacity onPress={() => props.navigation.goBack()}>
-        <Text style={{textAlign: 'center'}}>
-          Already have an Account ? &nbsp;
-          <Text
-            style={{
-              textAlign: 'center',
-              textDecorationLine: 'underline',
-              padding: 8,
-              fontSize: 16,
-              color: '#410DAA',
-            }}>
-            Log In
-          </Text>
+    <ImageBackground
+      source={require('../bg.jpeg')}
+      style={{height: '100%', width: '100%'}}>
+      <SafeAreaView style={container}>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 32,
+            textAlign: 'center',
+            marginVertical: 32,
+            fontStyle: 'italic',
+            color: '#fff',
+          }}>
+          ParkIT
         </Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+        <Text>{error}</Text>
+        <Text
+          style={{
+            marginHorizontal: 16,
+            marginBottom: 16,
+            fontWeight: 'bold',
+            color: '#fff',
+          }}>
+          Name
+        </Text>
+        {/* Input for name */}
+        <View style={borderContainer}>
+          <TextInput
+            value={name}
+            onChangeText={name => setName(name)}
+            style={{color: '#fff'}}
+          />
+        </View>
+        <Text
+          style={{
+            marginHorizontal: 16,
+            marginBottom: 16,
+            fontWeight: 'bold',
+            color: '#fff',
+          }}>
+          Email
+        </Text>
+        {/* Input for email */}
+        <View style={borderContainer}>
+          <TextInput
+            value={email}
+            onChangeText={email => setEmail(email)}
+            style={{color: '#fff'}}
+          />
+        </View>
+        <Text
+          style={{
+            marginHorizontal: 16,
+            marginBottom: 16,
+            fontWeight: 'bold',
+            color: '#fff',
+          }}>
+          Password
+        </Text>
+        {/* Input for password */}
+        <View style={borderContainer}>
+          <TextInput
+            value={password}
+            onChangeText={password => setPassword(password)}
+            style={{color: '#fff'}}
+          />
+        </View>
+        <TouchableOpacity
+          onPress={onSIgninPressed}
+          style={{
+            padding: 16,
+            margin: 16,
+            backgroundColor: '#fff',
+            alignItems: 'center',
+            borderRadius: 8,
+            alignSelf: 'center',
+            paddingHorizontal: 32,
+          }}>
+          {isLoading ? (
+            <ActivityIndicator color={'#000'} />
+          ) : (
+            <Text style={{color: '#000'}}>Sign Up</Text>
+          )}
+        </TouchableOpacity>
+        {/* If the user has an acount navigate back to login */}
+        <TouchableOpacity onPress={() => props.navigation.goBack()}>
+          <Text style={{textAlign: 'center', color: '#fff'}}>
+            Already have an Account ? &nbsp;
+            <Text
+              style={{
+                textAlign: 'center',
+                textDecorationLine: 'underline',
+                padding: 8,
+                fontSize: 16,
+                color: '#fff',
+              }}>
+              Log In
+            </Text>
+          </Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
   borderContainer: {
     borderColor: '#ddd',

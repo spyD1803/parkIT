@@ -12,6 +12,7 @@ import {
   FlatList,
   TouchableNativeFeedback,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import Heading from '../components/heading';
 import firestore from '@react-native-firebase/firestore';
@@ -47,105 +48,112 @@ function HomeScreen(props) {
   }, []);
 
   return (
-    <SafeAreaView style={container}>
-      <StatusBar backgroundColor={'#fff'} />
-      <Text style={heading}>Hey, {props.route.params.name}</Text>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          marginVertical: 16,
-        }}>
-        <TouchableNativeFeedback
-          onPress={() => {
-            props.navigation.navigate('parkingSpots', {
-              email: props.route.params.email,
-            });
+    <ImageBackground
+      source={require('../bg.jpeg')}
+      style={{width: '100%', height: '100%'}}>
+      <SafeAreaView style={container}>
+        <StatusBar backgroundColor={'#000'} />
+        <Text style={heading}>Hey, {props.route.params.name}</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            marginVertical: 16,
           }}>
-          <Text style={[button, {backgroundColor: '#E1F5FE'}]}>
-            New Booking
-          </Text>
-        </TouchableNativeFeedback>
-        <TouchableNativeFeedback
-          onPress={async () => {
-            await AsyncStorage.clear();
-            props.navigation.navigate('login');
-          }}>
-          <Text style={[button, {backgroundColor: '#FCE4EC'}]}>Sign Out</Text>
-        </TouchableNativeFeedback>
-      </View>
-      <Heading>Recent Bookings</Heading>
-      <FlatList
-        data={transactions}
-        ListEmptyComponent={
-          <Text style={{textAlign: 'center'}}>No Recent Bookings</Text>
-        }
-        renderItem={({item, index}) => {
-          return (
-            <View key={index}>
-              <TouchableOpacity
-                style={{marginHorizontal: 32}}
-                onPress={() =>
-                  props.navigation.navigate('ticket', {
-                    ticket: item,
-                  })
-                }>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    marginBottom: 8,
-                  }}>
-                  <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                    {item.spot}
-                  </Text>
-                  <Text
+          <TouchableNativeFeedback
+            onPress={() => {
+              props.navigation.navigate('parkingSpots', {
+                email: props.route.params.email,
+              });
+            }}>
+            <Text style={[button, {backgroundColor: '#E1F5FE'}]}>
+              New Booking
+            </Text>
+          </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={async () => {
+              await AsyncStorage.clear();
+              props.navigation.navigate('login');
+            }}>
+            <Text style={[button, {backgroundColor: '#FCE4EC'}]}>Sign Out</Text>
+          </TouchableNativeFeedback>
+        </View>
+        <Heading textColor={'#fff'}>Recent Bookings</Heading>
+        <FlatList
+          data={transactions}
+          ListEmptyComponent={
+            <Text style={{textAlign: 'center', color: '#fff'}}>
+              No Recent Bookings
+            </Text>
+          }
+          renderItem={({item, index}) => {
+            return (
+              <View key={index}>
+                <TouchableOpacity
+                  style={{marginHorizontal: 32}}
+                  onPress={() =>
+                    props.navigation.navigate('ticket', {
+                      ticket: item,
+                    })
+                  }>
+                  <View
                     style={{
-                      padding: 4,
-                      borderRadius: 4,
-                      backgroundColor:
-                        item.status == 'booked' ? '#E0F2F1' : '#FFEBEE',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      marginBottom: 8,
                     }}>
-                    {item.status}
-                  </Text>
-                </View>
+                    <Text
+                      style={{fontSize: 18, fontWeight: 'bold', color: '#fff'}}>
+                      {item.spot}
+                    </Text>
+                    <Text
+                      style={{
+                        padding: 4,
+                        borderRadius: 4,
+                        backgroundColor:
+                          item.status == 'booked' ? '#E0F2F1' : '#FFEBEE',
+                      }}>
+                      {item.status}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}>
+                    <Text style={{fontSize: 14, color: '#fff'}}>
+                      {moment(item.on).format('MMM DD, YYYY')}
+                    </Text>
+                    <Text style={{fontSize: 14, color: '#fff'}}>
+                      {moment(item.from).format('h:mm a')} -{' '}
+                      {moment(item.from)
+                        .add(Number(item.for), 'hours')
+                        .format('h:mm a')}
+                    </Text>
+                    {/* <Text>{item.duration}</Text> */}
+                  </View>
+                </TouchableOpacity>
                 <View
                   style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <Text style={{fontSize: 14}}>
-                    {moment(item.on).format('MMM DD, YYYY')}
-                  </Text>
-                  <Text style={{fontSize: 14}}>
-                    {moment(item.from).format('h:mm a')} -{' '}
-                    {moment(item.from)
-                      .add(Number(item.for), 'hours')
-                      .format('h:mm a')}
-                  </Text>
-                  {/* <Text>{item.duration}</Text> */}
-                </View>
-              </TouchableOpacity>
-              <View
-                style={{
-                  height: 1,
-                  backgroundColor: '#ddd',
-                  width: '100%',
-                  marginHorizontal: 32,
-                  marginVertical: 16,
-                }}
-              />
-            </View>
-          );
-        }}
-      />
-    </SafeAreaView>
+                    height: 1,
+                    backgroundColor: '#ddd',
+                    width: '100%',
+                    marginHorizontal: 32,
+                    marginVertical: 16,
+                  }}
+                />
+              </View>
+            );
+          }}
+        />
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(0,0,0,0.6)',
     flex: 1,
   },
   button: {
@@ -162,6 +170,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginHorizontal: 16,
     fontSize: 24,
+    color: '#fff',
   },
 });
 

@@ -56,6 +56,8 @@ const Booking = props => {
     getUserData();
   }, []);
 
+  const removeIndices = [6, 7, 8, 11, 12, 13, 16, 17, 18];
+
   return (
     <SafeAreaView style={container}>
       <ScrollView style={{flex: 1}}>
@@ -66,35 +68,116 @@ const Booking = props => {
         <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
           {spots.map((spot, index) => {
             const spotData = spot;
-            return (
-              <TouchableOpacity
-                key={index}
-                style={{
-                  height: 64,
-                  width: 48,
-                  borderRadius: 8,
-                  borderWidth: 1,
-                  borderColor: 'steelblue',
-                  margin: 16,
-                  backgroundColor: spotData.bookedBy ? 'yellow' : '#fff',
-                }}
-                onPress={() =>
-                  !spotData.bookedBy &&
-                  props.navigation.dispatch(
-                    StackActions.replace('bookingInfo', {
-                      spotName: props.route.params.spotName,
-                      spotId: spotData.id,
-                      email: props.route.params.email,
-                      spot: props.route.params.spot,
-                      price: props.route.params.price,
-                    }),
-                  )
-                }
-              />
-            );
+            if (props.route.params.spotName == 'apj') {
+              if (removeIndices.includes(index)) {
+                return (
+                  <View
+                    key={index}
+                    style={{
+                      height: 72,
+                      width: 48,
+                      borderRadius: 8,
+                      borderWidth: 2,
+                      borderColor: 'gray',
+                      margin: 16,
+                      backgroundColor: 'gray',
+                    }}
+                  />
+                );
+              }
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={{
+                    height: 72,
+                    width: 48,
+                    borderRadius: 8,
+                    borderWidth: 2,
+                    borderColor: 'blue',
+                    margin: 16,
+                    backgroundColor: spotData.bookedBy ? 'yellow' : '#fff',
+                  }}
+                  onPress={() =>
+                    !spotData.bookedBy &&
+                    props.navigation.dispatch(
+                      StackActions.replace('bookingInfo', {
+                        spotName: props.route.params.spotName,
+                        spotId: spotData.id,
+                        email: props.route.params.email,
+                        spot: props.route.params.spot,
+                        price: props.route.params.price,
+                      }),
+                    )
+                  }
+                />
+              );
+            } else {
+              return (
+                <TouchableOpacity
+                  key={index}
+                  style={{
+                    height: index % 5 == 0 ? 72 : 48,
+                    width: 48,
+                    borderRadius: 8,
+                    borderWidth: index % 5 == 0 ? 2 : 1,
+                    borderColor: index % 5 == 0 ? 'blue' : 'steelblue',
+                    margin: 16,
+                    backgroundColor: spotData.bookedBy ? 'yellow' : '#fff',
+                  }}
+                  onPress={() =>
+                    !spotData.bookedBy &&
+                    props.navigation.dispatch(
+                      StackActions.replace('bookingInfo', {
+                        spotName: props.route.params.spotName,
+                        spotId: spotData.id,
+                        email: props.route.params.email,
+                        spot: props.route.params.spot,
+                        price: props.route.params.price,
+                      }),
+                    )
+                  }
+                />
+              );
+            }
           })}
         </View>
       </ScrollView>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          paddingHorizontal: 16,
+        }}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View
+            style={{
+              height: 16,
+              width: 16,
+              borderRadius: 4,
+              borderWidth: 1,
+              borderColor: 'blue',
+              margin: 8,
+              backgroundColor: '#fff',
+            }}
+          />
+          <Text>CAR</Text>
+        </View>
+        <View style={{flexDirection: 'row', alignItems: 'center', width: 100}}>
+          <View
+            style={{
+              height: 16,
+              width: 16,
+              borderRadius: 4,
+              borderWidth: 1,
+              borderColor: 'steelblue',
+              margin: 8,
+              backgroundColor: '#fff',
+            }}
+          />
+          <Text>BIKE</Text>
+        </View>
+      </View>
+
       <View
         style={{
           flexDirection: 'row',
@@ -115,7 +198,7 @@ const Booking = props => {
           />
           <Text>Available</Text>
         </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center', width: 100}}>
           <View
             style={{
               height: 16,
@@ -136,7 +219,7 @@ const Booking = props => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: 'gray',
     flex: 1,
   },
 

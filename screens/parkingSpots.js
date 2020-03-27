@@ -27,14 +27,14 @@ const ParkingSpots = props => {
           <Text style={spotName}>APJ Block</Text>
         </TouchableOpacity>
 
-        <Heading>Paid</Heading>
+        {/* <Heading>Paid</Heading> */}
         <TouchableOpacity
           onPress={() =>
             props.navigation.navigate('booking', {
               spotName: 'opal',
               spot: 'Opal Block',
               email: props.route.params.email,
-              price: 20,
+              price: 0,
             })
           }>
           <Text style={spotName}>Opal Block</Text>
@@ -45,7 +45,7 @@ const ParkingSpots = props => {
               spotName: 'pearl',
               spot: 'Pearl Block',
               email: props.route.params.email,
-              price: 20,
+              price: 0,
             })
           }>
           <Text style={spotName}>Pearl Block</Text>
@@ -67,7 +67,7 @@ const ParkingSpots = props => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: 'gray',
     flex: 1,
   },
 

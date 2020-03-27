@@ -8,6 +8,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
+  ImageBackground,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -22,6 +23,7 @@ const Login = props => {
 
   useEffect(() => {
     async function getData() {
+      Snackbar;
       try {
         const value = await AsyncStorage.getItem('user');
         if (value !== null) {
@@ -75,85 +77,104 @@ const Login = props => {
   };
 
   return (
-    <SafeAreaView style={container}>
-      <Text
-        style={{
-          fontWeight: 'bold',
-          fontSize: 32,
-          textAlign: 'center',
-          marginVertical: 32,
-          fontStyle: 'italic',
-          color: '#410DAA',
-        }}>
-        ParkIT
-      </Text>
-      <Text>{JSON.stringify(error)}</Text>
-      <Text
-        style={{marginHorizontal: 16, marginBottom: 16, fontWeight: 'bold'}}>
-        Email
-      </Text>
-
-      {/* Input for mail */}
-      <View style={borderContainer}>
-        <TextInput value={email} onChangeText={email => setEmail(email)} />
-      </View>
-      <Text
-        style={{marginHorizontal: 16, marginBottom: 16, fontWeight: 'bold'}}>
-        Password
-      </Text>
-
-      {/* Input for password */}
-      <View style={borderContainer}>
-        <TextInput
-          value={password}
-          onChangeText={password => setPassword(password)}
-        />
-      </View>
-
-      <TouchableOpacity
-        onPress={onLoginPressed}
-        style={{
-          padding: 16,
-          margin: 16,
-          backgroundColor: '#410DAA',
-          alignItems: 'center',
-          borderRadius: 8,
-          alignSelf: 'center',
-          paddingHorizontal: 32,
-        }}>
-        {isLoading ? (
-          <ActivityIndicator color={'#fff'} />
-        ) : (
-          <Text style={{color: '#fff'}}>Login</Text>
-        )}
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => {
-          props.navigation.navigate('signup');
-        }}>
-        <Text style={{textAlign: 'center'}}>
-          Don't have an Account ? &nbsp;
-          <Text
-            style={{
-              textAlign: 'center',
-              textDecorationLine: 'underline',
-              padding: 8,
-              fontSize: 16,
-              color: '#410DAA',
-            }}>
-            Sign Up
-          </Text>
+    <ImageBackground
+      source={require('../bg.jpeg')}
+      style={{width: '100%', height: '100%'}}>
+      <SafeAreaView style={container}>
+        <Text
+          style={{
+            fontWeight: 'bold',
+            fontSize: 32,
+            textAlign: 'center',
+            marginVertical: 32,
+            fontStyle: 'italic',
+            color: '#fff',
+          }}>
+          ParkIT
         </Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+        <Text>{JSON.stringify(error)}</Text>
+        <Text
+          style={{
+            marginHorizontal: 16,
+            marginBottom: 16,
+            fontWeight: 'bold',
+            color: '#fff',
+          }}>
+          Email
+        </Text>
+
+        {/* Input for mail */}
+        <View style={borderContainer}>
+          <TextInput
+            value={email}
+            onChangeText={email => setEmail(email)}
+            style={{color: '#fff'}}
+          />
+        </View>
+        <Text
+          style={{
+            marginHorizontal: 16,
+            marginBottom: 16,
+            fontWeight: 'bold',
+            color: '#fff',
+          }}>
+          Password
+        </Text>
+
+        {/* Input for password */}
+        <View style={borderContainer}>
+          <TextInput
+            value={password}
+            onChangeText={password => setPassword(password)}
+            style={{color: '#fff'}}
+          />
+        </View>
+
+        <TouchableOpacity
+          onPress={onLoginPressed}
+          style={{
+            padding: 16,
+            margin: 16,
+            backgroundColor: '#fff',
+            alignItems: 'center',
+            borderRadius: 8,
+            alignSelf: 'center',
+            paddingHorizontal: 32,
+          }}>
+          {isLoading ? (
+            <ActivityIndicator color={'#000'} />
+          ) : (
+            <Text style={{color: '#000'}}>Login</Text>
+          )}
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => {
+            props.navigation.navigate('signup');
+          }}>
+          <Text style={{textAlign: 'center', color: '#fff'}}>
+            Don't have an Account ? &nbsp;
+            <Text
+              style={{
+                textAlign: 'center',
+                textDecorationLine: 'underline',
+                padding: 8,
+                fontSize: 16,
+                color: '#fff',
+              }}>
+              Sign Up
+            </Text>
+          </Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(0,0,0,0.6)',
   },
   borderContainer: {
     borderColor: '#ddd',

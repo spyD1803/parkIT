@@ -156,6 +156,7 @@ const Ticket = props => {
           <QRCode
             value={ticket.bookedBy + ticket.on + ticket.from + ticket.spot}
             size={150}
+            backgroundColor={'gray'}
           />
         </View>
         <View style={{alignItems: 'center'}}>
@@ -165,13 +166,14 @@ const Ticket = props => {
               fontSize: 20,
               color: 'steelblue',
               marginBottom: 16,
+              color: '#000',
             }}>
             {ticket.spot}
           </Text>
-          <Text style={{fontWeight: 'bold', fontSize: 18, color: '#aaa'}}>
+          <Text style={{fontWeight: 'bold', fontSize: 18, color: '#eee'}}>
             {moment(ticket.on).format('MMM DD, YYYY')}
           </Text>
-          <Text style={{fontWeight: 'bold', fontSize: 18, color: '#aaa'}}>
+          <Text style={{fontWeight: 'bold', fontSize: 18, color: '#eee'}}>
             {moment(ticket.from).format('h:mm a')} -
             {moment(ticket.from)
               .add(Number(ticket.for), 'hours')
@@ -188,7 +190,7 @@ const Ticket = props => {
             padding: 16,
             margin: 16,
             marginTop: 120,
-            backgroundColor: '#410DAA',
+            backgroundColor: '#FDD835',
             alignItems: 'center',
             borderRadius: 8,
           }}
@@ -196,23 +198,23 @@ const Ticket = props => {
           {isextendingLoading ? (
             <ActivityIndicator color={'#fff'} />
           ) : (
-            <Text style={{color: '#fff'}}>Extend by an hour</Text>
+            <Text style={{color: '#000'}}>Extend by an hour</Text>
           )}
         </TouchableOpacity>
         <TouchableOpacity
           style={{
             padding: 16,
             margin: 16,
-            borderColor: '#410DAA',
+            borderColor: '#FDD835',
             borderWidth: 1,
             alignItems: 'center',
             borderRadius: 8,
           }}
           onPress={onCancelPressed}>
           {isCancelLoading ? (
-            <ActivityIndicator color={'#410DAA'} />
+            <ActivityIndicator color={'#FDD835'} />
           ) : (
-            <Text style={{color: '#410DAA'}}>Cancel</Text>
+            <Text style={{color: '#FDD835'}}>Cancel</Text>
           )}
         </TouchableOpacity>
       </ScrollView>
@@ -223,7 +225,7 @@ const Ticket = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'gray',
   },
 });
 

@@ -140,7 +140,7 @@ const BookingInfo = props => {
     <SafeAreaView style={container}>
       <ScrollView style={{flex: 1}}>
         <Heading>{props.route.params.spot}</Heading>
-        <Text>{JSON.stringify(props.route.params)}</Text>
+        {/* <Text>{JSON.stringify(props.route.params)}</Text> */}
         {/* <Text>{moment(message).format('h:mm a')}</Text> */}
         <Text
           style={{marginHorizontal: 16, marginBottom: 16, fontWeight: 'bold'}}>
@@ -195,14 +195,14 @@ const BookingInfo = props => {
         style={{
           padding: 16,
           margin: 16,
-          backgroundColor: '#410DAA',
+          backgroundColor: '#FDD835',
           alignItems: 'center',
           borderRadius: 8,
         }}
         onPress={() => {
           setShowModal(true);
         }}>
-        <Text style={{color: '#fff'}}>Book</Text>
+        <Text style={{color: '#000'}}>Book</Text>
       </TouchableOpacity>
       <Modal
         isVisible={showModal}
@@ -224,7 +224,7 @@ const BookingInfo = props => {
               fontSize: 32,
               fontWeight: 'bold',
               fontStyle: 'italic',
-              color: '#410DAA',
+              color: '#FDD835',
             }}>
             &#8377; {props.route.params.price * Number(hours)}
           </Text>
@@ -234,7 +234,7 @@ const BookingInfo = props => {
             style={{
               padding: 16,
               margin: 16,
-              backgroundColor: '#410DAA',
+              backgroundColor: '#FDD835',
               alignItems: 'center',
               borderRadius: 8,
             }}
@@ -253,7 +253,7 @@ const BookingInfo = props => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
+    backgroundColor: 'gray',
     flex: 1,
   },
 

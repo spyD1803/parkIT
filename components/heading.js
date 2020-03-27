@@ -6,7 +6,13 @@ const Heading = props => {
   return (
     <View style={container}>
       <View style={sideHeading} />
-      <Text style={headingText}>{props.children}</Text>
+      <Text
+        style={[
+          headingText,
+          {color: props.textColor ? props.textColor : '#000'},
+        ]}>
+        {props.children}
+      </Text>
     </View>
   );
 };
@@ -23,7 +29,7 @@ const styles = StyleSheet.create({
   sideHeading: {
     width: 20,
     height: 24,
-    backgroundColor: '#410DAA',
+    backgroundColor: '#FDD835',
     borderTopRightRadius: 8,
     borderBottomRightRadius: 8,
     marginRight: 16,
