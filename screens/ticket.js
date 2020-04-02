@@ -15,6 +15,7 @@ import Heading from '../components/heading';
 import firestore from '@react-native-firebase/firestore';
 import Snackbar from 'react-native-snackbar';
 import moment from 'moment';
+import Axios from 'axios';
 
 const Ticket = props => {
   const {ticket} = props.route.params;
@@ -46,6 +47,17 @@ const Ticket = props => {
       return spot;
     });
     setIscancel(true);
+
+    Axios.post(
+      'https://us-central1-parkit-c0ffc.cloudfunctions.net/bookingCanceled',
+      {
+        bookedBy: ticket.bookedBy,
+        from: ticket.from,
+        for: ticket.for,
+        on: ticket.on,
+        spot: ticket.spot,
+      },
+    );
 
     await firestore()
       .collection('spots')
@@ -114,6 +126,17 @@ const Ticket = props => {
       return spot;
     });
 
+    Axios.post(
+      'https://us-central1-parkit-c0ffc.cloudfunctions.net/bookingExtended',
+      {
+        bookedBy: ticket.bookedBy,
+        from: ticket.from,
+        for: String(Number(ticket.for) + 1),
+        on: ticket.on,
+        spot: ticket.spot,
+      },
+    );
+
     await firestore()
       .collection('spots')
       .doc(ticket.spotName)
@@ -154,7 +177,8 @@ const Ticket = props => {
         contentContainerStyle={{flex: 1, justifyContent: 'center'}}>
         <View style={{alignItems: 'center', marginVertical: 16}}>
           <QRCode
-            value={ticket.bookedBy + ticket.on + ticket.from + ticket.spot}
+            // eslint-disable-next-line prettier/prettier
+            value={`${ticket.bookedBy}-${ticket.vehicleNumber}-${ticket.on}-${ticket.from}-${ticket.spot}`}
             size={150}
             backgroundColor={'gray'}
           />
@@ -164,7 +188,6 @@ const Ticket = props => {
             style={{
               fontWeight: 'bold',
               fontSize: 20,
-              color: 'steelblue',
               marginBottom: 16,
               color: '#000',
             }}>

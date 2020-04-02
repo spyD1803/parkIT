@@ -25,6 +25,8 @@ import BookingInfo from './screens/bookingInfo';
 import Ticket from './screens/ticket';
 import Login from './screens/login';
 import Signup from './screens/signup';
+import DrivingInfo from './screens/drivingInfo';
+import Verification from './screens/verification';
 
 const Stack = createStackNavigator();
 
@@ -83,6 +85,23 @@ const App = () => {
         <Stack.Screen
           name="signup"
           component={Signup}
+          options={{
+            headerMode: 'none',
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="driversInfo"
+          component={DrivingInfo}
+          options={{
+            headerMode: 'none',
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="verify"
+          component={Verification}
           options={{
             headerMode: 'none',
             headerShown: false,

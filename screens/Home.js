@@ -17,15 +17,27 @@ import {
 import Heading from '../components/heading';
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
-import {StackActions} from '@react-navigation/native';
+import {StackActions, useFocusEffect} from '@react-navigation/native';
 import moment from 'moment';
 
 function HomeScreen(props) {
   const {container, button, heading} = styles;
   const [transactions, setTransactions] = useState([]);
+  const [user, setuser] = useState({});
 
   const getUserData = async () => {
     //Get the collection of bookings and check if there are any bookings done by the current user
+    try {
+      const value = await AsyncStorage.getItem('user');
+      // seterror(value);
+      if (value !== null) {
+        setuser(JSON.parse(value));
+        // value previously s
+      }
+    } catch (e) {
+      // error reading value
+    }
+
     const documentSnapshot = await firestore()
       .collection('bookings')
       .onSnapshot(function(querySnap) {
@@ -47,6 +59,14 @@ function HomeScreen(props) {
     getUserData();
   }, []);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      getUserData();
+
+      return () => {};
+    }, []),
+  );
+
   return (
     <ImageBackground
       source={require('../bg.jpeg')}
@@ -54,6 +74,9 @@ function HomeScreen(props) {
       <SafeAreaView style={container}>
         <StatusBar backgroundColor={'#000'} />
         <Text style={heading}>Hey, {props.route.params.name}</Text>
+
+        {/* <Text>{JSON.stringify(props)}</Text> */}
+        {/* <Text>{JSON.stringify(user)}</Text> */}
         <View
           style={{
             flexDirection: 'row',
@@ -62,14 +85,41 @@ function HomeScreen(props) {
           }}>
           <TouchableNativeFeedback
             onPress={() => {
-              props.navigation.navigate('parkingSpots', {
-                email: props.route.params.email,
-              });
+              if (
+                (props.route.params.drivingLicence &&
+                  props.route.params.drivingLicenceImg) ||
+                (user.drivingLicence && user.drivingLicenceImg)
+              ) {
+                props.navigation.navigate('parkingSpots', {
+                  email: props.route.params.email,
+                });
+              } else {
+                props.navigation.navigate('driversInfo', {
+                  email: props.route.params.email,
+                  name: props.route.params.name,
+                  id: props.route.params.id,
+                });
+              }
             }}>
             <Text style={[button, {backgroundColor: '#E1F5FE'}]}>
               New Booking
             </Text>
           </TouchableNativeFeedback>
+          <TouchableNativeFeedback
+            onPress={async () => {
+              props.navigation.navigate('driversInfo', {
+                email: props.route.params.email,
+                name: props.route.params.name,
+                id: props.route.params.id,
+                ...props.route.params,
+                ...user,
+              });
+            }}>
+            <Text style={[button, {backgroundColor: '#FFE0B2'}]}>
+              User Info
+            </Text>
+          </TouchableNativeFeedback>
+
           <TouchableNativeFeedback
             onPress={async () => {
               await AsyncStorage.clear();

@@ -13,6 +13,8 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import Snackbar from 'react-native-snackbar';
+import {StackActions} from '@react-navigation/native';
+import Axios from 'axios';
 
 const Signup = props => {
   const [isLoading, setIsLoading] = useState(false);
@@ -44,25 +46,46 @@ const Signup = props => {
   const onSIgninPressed = async () => {
     setIsLoading(true);
 
-    // when submit is pressed add the email, first name and password to the collection
-    const documentSnapshot = await firestore()
-      .collection('users')
-      .add({
+    const code = Math.floor(100000 + Math.random() * 900000);
+
+    await Axios.post(
+      'https://us-central1-parkit-c0ffc.cloudfunctions.net/verificationCode',
+      {
+        email,
+        code,
+      },
+    );
+
+    props.navigation.dispatch(
+      StackActions.replace('verify', {
         name,
         email,
         password,
-      });
+        code,
+      }),
+    );
 
-    // After adding to the collection navigate to login screen for the user to login
-    if (documentSnapshot) {
-      Snackbar.show({
-        text: 'Account created successfully. Log In',
-        duration: Snackbar.LENGTH_SHORT,
-      });
-      props.navigation.navigate('login');
-    } else {
-      seterror('No Account exists with the email');
-    }
+    // when submit is pressed add the email, first name and password to the collection
+    // const documentSnapshot = await firestore()
+    //   .collection('users')
+    //   .add({
+    //     name,
+    //     email,
+    //     password,
+    //     drivingLicence: '',
+    //     drivingLicenceImg: '',
+    //   });
+
+    // // After adding to the collection navigate to login screen for the user to login
+    // if (documentSnapshot) {
+    //   Snackbar.show({
+    //     text: 'Account created successfully. Log In',
+    //     duration: Snackbar.LENGTH_SHORT,
+    //   });
+    //   props.navigation.navigate('login');
+    // } else {
+    //   seterror('No Account exists with the email');
+    // }
     // setPasswoinrd('No registered email');
     setIsLoading(false);
   };

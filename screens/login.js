@@ -26,10 +26,13 @@ const Login = props => {
       Snackbar;
       try {
         const value = await AsyncStorage.getItem('user');
+        // seterror(value);
         if (value !== null) {
           props.navigation.navigate('Home', {
             name: JSON.parse(value)['name'],
             email: JSON.parse(value)['email'],
+            id: JSON.parse(value)['id'],
+            ...JSON.parse(value),
           });
           // value previously s
         }
@@ -64,10 +67,16 @@ const Login = props => {
       seterror(doc.data());
       if (doc.data()['email'] == email && doc.data()['password'] == password) {
         // seterror(doc.data());
-        await AsyncStorage.setItem('user', JSON.stringify(doc.data()));
+        await AsyncStorage.setItem(
+          'user',
+          JSON.stringify({...doc.data(), id: doc.id}),
+        );
+        // seterror(JSON.stringify({...doc.data(), id: doc.id}));
         props.navigation.navigate('Home', {
           name: doc.data()['name'],
           email: doc.data()['email'],
+          id: doc.id,
+          ...doc.data(),
         });
       }
     });

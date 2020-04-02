@@ -4,6 +4,7 @@ import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
+  TextInput,
   StyleSheet,
   SafeAreaView,
   ScrollView,
@@ -17,6 +18,7 @@ import moment from 'moment';
 import firestore from '@react-native-firebase/firestore';
 import Snackbar from 'react-native-snackbar';
 import Modal from 'react-native-modal';
+import Axios from 'axios';
 
 const BookingInfo = props => {
   const data = [...Array(20).keys()].map((y, index) => ({
@@ -42,6 +44,7 @@ const BookingInfo = props => {
   const [isLoading, setIsloading] = useState(false);
   const [message, setMessage] = useState('');
   const [hours, setHours] = useState('1');
+  const [vehicleNumber, setVehicleNumber] = useState('');
 
   const onChange = value => {
     setShow(false);
@@ -77,6 +80,24 @@ const BookingInfo = props => {
   };
 
   useEffect(() => {
+    // firestore()
+    //   .collection('spots')
+    //   .doc('apj')
+    //   .update({
+    //     spots: data,
+    //   })
+    //   .then(function() {
+    //     Snackbar.show({
+    //       text: 'updates',
+    //       duration: Snackbar.LENGTH_SHORT,
+    //     });
+    //   })
+    //   .catch(function(error) {
+    //     // The document probably doesn't exist.
+
+    //     console.error('Error updating document: ', error);
+    //   });
+
     getUserData();
   }, []);
 
@@ -96,6 +117,18 @@ const BookingInfo = props => {
       }
       return spot;
     });
+
+    Axios.post(
+      'https://us-central1-parkit-c0ffc.cloudfunctions.net/bookingConfirmed',
+      {
+        bookedBy: props.route.params.email,
+        bookedAt: newDate,
+        from: time,
+        for: hours,
+        on: date,
+        spot: props.route.params.spot,
+      },
+    );
     await firestore()
       .collection('bookings')
       .add({
@@ -107,8 +140,10 @@ const BookingInfo = props => {
         spot: props.route.params.spot,
         spotName: props.route.params.spotName,
         spotId: props.route.params.spotId,
+        vehicleNumber,
         status: 'booked',
       });
+
     await firestore()
       .collection('spots')
       .doc(props.route.params.spotName)
@@ -138,45 +173,72 @@ const BookingInfo = props => {
 
   return (
     <SafeAreaView style={container}>
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={{flex: 1}} contentContainerStyle={{flex: 1}}>
         <Heading>{props.route.params.spot}</Heading>
         {/* <Text>{JSON.stringify(props.route.params)}</Text> */}
         {/* <Text>{moment(message).format('h:mm a')}</Text> */}
-        <Text
-          style={{marginHorizontal: 16, marginBottom: 16, fontWeight: 'bold'}}>
-          Date
-        </Text>
-        <View style={styles.borderContainer}>
+        <View style={{flex: 1}}>
           <Text
-            onPress={() => {
-              setShow(true);
-              setMode('date');
+            style={{
+              marginHorizontal: 16,
+              marginBottom: 16,
+              fontWeight: 'bold',
             }}>
-            {moment(date).format('MMM DD, YYYY')}
+            Vehicle No.
           </Text>
-        </View>
-        <Text style={{marginHorizontal: 16, fontWeight: 'bold'}}>Time</Text>
-        <View style={styles.borderContainer}>
+          <View style={styles.borderContainer}>
+            <TextInput
+              value={vehicleNumber}
+              style={{width: '100%'}}
+              onChangeText={vehicleNumber => setVehicleNumber(vehicleNumber)}
+            />
+          </View>
           <Text
-            onPress={() => {
-              setShow(true);
-              setMode('time');
+            style={{
+              marginHorizontal: 16,
+              marginBottom: 16,
+              fontWeight: 'bold',
             }}>
-            {moment(time).format('h:mm a')}
+            Date
           </Text>
-        </View>
+          <View style={styles.borderContainer}>
+            <Text
+              onPress={() => {
+                setShow(true);
+                setMode('date');
+              }}>
+              {moment(date).format('MMM DD, YYYY')}
+            </Text>
+          </View>
+          <Text style={{marginHorizontal: 16, fontWeight: 'bold'}}>Time</Text>
+          <View style={styles.borderContainer}>
+            <Text
+              onPress={() => {
+                setShow(true);
+                setMode('time');
+              }}>
+              {moment(time).format('h:mm a')}
+            </Text>
+          </View>
 
-        <Text
-          style={{marginHorizontal: 16, marginBottom: 16, fontWeight: 'bold'}}>
-          How many hours ?{' '}
-        </Text>
-        <View style={styles.borderContainer}>
-          <Picker onValueChange={item => setHours(item)} selectedValue={hours}>
-            <Picker.Item label="1hrs" value="1" />
-            <Picker.Item label="2hrs" value="2" />
-            <Picker.Item label="3hrs" value="3" />
-            <Picker.Item label="4hrs" value="4" />
-          </Picker>
+          <Text
+            style={{
+              marginHorizontal: 16,
+              marginBottom: 16,
+              fontWeight: 'bold',
+            }}>
+            How many hours ?{' '}
+          </Text>
+          <View style={styles.borderContainer}>
+            <Picker
+              onValueChange={item => setHours(item)}
+              selectedValue={hours}>
+              <Picker.Item label="1hrs" value="1" />
+              <Picker.Item label="2hrs" value="2" />
+              <Picker.Item label="3hrs" value="3" />
+              <Picker.Item label="4hrs" value="4" />
+            </Picker>
+          </View>
         </View>
 
         {show && (
@@ -190,20 +252,22 @@ const BookingInfo = props => {
             value={new Date()}
           />
         )}
+
+        <TouchableOpacity
+          style={{
+            padding: 16,
+            margin: 16,
+            backgroundColor: '#FDD835',
+            alignItems: 'center',
+            borderRadius: 8,
+          }}
+          onPress={() => {
+            setShowModal(true);
+          }}>
+          <Text style={{color: '#000'}}>Book</Text>
+        </TouchableOpacity>
       </ScrollView>
-      <TouchableOpacity
-        style={{
-          padding: 16,
-          margin: 16,
-          backgroundColor: '#FDD835',
-          alignItems: 'center',
-          borderRadius: 8,
-        }}
-        onPress={() => {
-          setShowModal(true);
-        }}>
-        <Text style={{color: '#000'}}>Book</Text>
-      </TouchableOpacity>
+
       <Modal
         isVisible={showModal}
         onBackdropPress={() => {
